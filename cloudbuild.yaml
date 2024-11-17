@@ -52,6 +52,7 @@ steps:
     # gcloud source repos clone hello-cloudbuild-env && \
     # cd hello-cloudbuild-env && \
     git clone https://github.com/jfdelafuente/gke-gitops-tutorial-cloudbuild.git
+    cd gke-gitops-tutorial-cloudbuild
     git checkout candidate && \
     git config user.email $(gcloud auth list --filter=status:ACTIVE --format='value(account)')
 
