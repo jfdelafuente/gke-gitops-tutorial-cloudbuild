@@ -102,7 +102,7 @@ spec:
     spec:
       containers:
         - image: >-
-            gcr.io/my-cloudbuild-python/github.com/jfdelafuente/gke-gitops-tutorial-cloudbuild
+            us-central1-docker.pkg.dev/my-cloudbuild-python/my-repository/hello-cloudbuild
           imagePullPolicy: IfNotPresent
           name: hello-cloudbuild
           resources:
