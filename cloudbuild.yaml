@@ -39,47 +39,6 @@ steps:
   args:
   - 'push'
   - 'europe-southwest1-docker.pkg.dev/$PROJECT_ID/my-repository/hello-cloudbuild:$SHORT_SHA'
-# [END cloudbuild]
-
-# [START cloudbuild-trigger-cd]
-# This step clones the hello-cloudbuild-env repository
-- name: 'gcr.io/cloud-builders/gcloud'
-  id: Clone env repository
-  entrypoint: /bin/sh
-  args:
-  - '-c'
-  - |
-    # gcloud source repos clone hello-cloudbuild-env && \
-    # cd hello-cloudbuild-env && \
-    git clone https://github.com/jfdelafuente/gke-gitops-tutorial-cloudbuild.git
-    cd gke-gitops-tutorial-cloudbuild
-    git checkout candidate && \
-    git config user.email $(gcloud auth list --filter=status:ACTIVE --format='value(account)')
-
-# This step generates the new manifest
-- name: 'gcr.io/cloud-builders/gcloud'
-  id: Generate manifest
-  entrypoint: /bin/sh
-  args:
-  - '-c'
-  - |
-    sed "s/GOOGLE_CLOUD_PROJECT/${PROJECT_ID}/g" kubernetes.yaml.tpl | \
-    sed "s/COMMIT_SHA/${SHORT_SHA}/g" > gke-gitops-tutorial-cloudbuild/kubernetes.yaml
-
-# This step pushes the manifest back to hello-cloudbuild-env
-- name: 'gcr.io/cloud-builders/gcloud'
-  id: Push manifest
-  entrypoint: /bin/sh
-  args:
-  - '-c'
-  - |
-    set -x && \
-    cd gke-gitops-tutorial-cloudbuild && \
-    git add kubernetes.yaml && \
-    git commit -m "Deploying image europe-southwest1-docker.pkg.dev/$PROJECT_ID/my-repository/hello-cloudbuild:${SHORT_SHA}
-    Built from commit ${COMMIT_SHA} of repository hello-cloudbuild-app
-    Author: $(git log --format='%an <%ae>' -n 1 HEAD)" && \
-    git push origin candidate
 options:
   logging: CLOUD_LOGGING_ONLY
-# [END cloudbuild-trigger-cd]
+# [END cloudbuild]
